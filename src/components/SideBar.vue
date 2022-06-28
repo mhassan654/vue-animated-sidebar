@@ -1,36 +1,187 @@
 <template>
-    <aside>
-        <div class="logo">
-            <img src="../assets/logo.png" alt="vue" srcset="">
-        </div>
-    </aside>
+  <aside :class="`${is_expanded && 'is-expanded'}`">
+    <div class="logo">
+      <img src="../assets/logo.png" alt="vue" srcset="" />
+    </div>
+    <div class="menu-toggle-wrap">
+      <button class="menu-toggle" @click="ToggleMenu">
+        <span class="material-icons"> keyboard_double_arrow_right </span>
+      </button>
+    </div>
+
+    <h3>Dashboard</h3>
+    <div class="menu">
+      <router-link class="button" to="/">
+        <span class="material-icons"> home </span>
+        <span class="text"> Home </span>
+      </router-link>
+
+      <router-link class="button" to="/about">
+        <span class="material-icons"> visibility </span>
+        <span class="text"> About </span>
+      </router-link>
+
+       <router-link class="button" to="/team">
+        <span class="material-icons"> group </span>
+        <span class="text"> Users </span>
+      </router-link>
+
+       <router-link class="button" to="/products">
+        <span class="material-icons"> inventory_2 </span>
+        <span class="text"> About </span>
+      </router-link>
+
+       <router-link class="button" to="/staff">
+        <span class="material-icons"> group_add </span>
+        <span class="text"> Staff </span>
+      </router-link>
+    </div>
+
+    <div class="flex"></div>
+     <div class="menu">
+      <router-link class="button" to="/settings">
+        <span class="material-icons"> settings </span>
+        <span class="text"> Settings </span>
+      </router-link>
+     </div>
+  </aside>
 </template>
 <script setup>
-// export default {
-//     setup() {
-        
-//     },
-// }
+import { ref } from "vue";
+const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
+
+const ToggleMenu = () => {
+  is_expanded.value = !is_expanded.value;
+  localStorage.setItem("is_expanded", is_expanded.value)
+};
 </script>
 <style lang="scss" scoped>
-aside{
+aside {
+  display: flex;
+  flex-direction: column;
+  // width: var(--sidebar-width);
+  width: calc(2rem + 32px);
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 1rem;
+
+  background: var(--dark);
+  color: var(--light);
+
+  transition: 0.2s ease-out;
+
+  .flex{
+    flex: 1 1 0;
+  }
+
+  .logo {
+    margin-bottom: 1rem;
+    img {
+      width: 2rem;
+    }
+  }
+
+  h3,
+  .button .text {
+    opacity: 0;
+    transition: 0.3s ease-out;
+  }
+
+  h3{
+    color: var(--grey);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    text-decoration: uppercase;
+  }
+
+  .menu {
+    margin: 0 -1rem;
+
+    .button {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+
+      padding: 0.5rem 1rem;
+      transition: 0.2s ease-out;
+
+      .material-icons {
+        font-size: 2rem;
+        color: var(--light);
+        transition: 0.2s ease-out;
+      }
+
+      .text {
+        color: var(--light);
+        transition: 0.2s ease-out;
+      }
+
+      &:hover, &.router-link-exact-active {
+        background-color: var(--dark-alt);
+
+        .material-icons , .text{
+          color: var(--primary);
+        }
+      }
+
+      &.router-link-exact-active{
+        border-right: 5px solid var(--primary);
+
+      }
+    }
+  }
+
+  &.is-expanded {
+    width: var(--sidebar-width);
+
+    .menu-toggle-wrap {
+      top: -3rem;
+      .menu-toggle {
+        transform: rotate(-180deg);
+      }
+    }
+
+    h3,
+    .button .text {
+      opacity: 1;
+    }
+
+    .button {
+      .material-icons {
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .menu-toggle-wrap {
     display: flex;
-    flex-direction: column;
-    // width: var(--sidebar-width);
-    width: calc(2rem + 32px);
-    min-height: 100vh;
-    overflow: hidden;
-    padding: 1rem;
+    justify-content: flex-end;
 
-    background: var(--dark);
-    color: var(--light);
-
+    position: relative;
+    top: 0;
     transition: 0.2s ease-out;
 
-    @media(max-width: 768px) {
-        position: fixed;
-        z-index: 99;
-    }
-}
+    .menu-toggle {
+      transition: 0.2s ease-out;
 
+      .material-icons {
+        font-size: 2rem;
+        color: var(--light);
+        transition: 0.2s ease-out;
+      }
+
+      &:hover {
+        .material-icons {
+          color: var(--primary);
+          transform: translate(0.5rem);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    position: fixed;
+    z-index: 99;
+  }
+}
 </style>

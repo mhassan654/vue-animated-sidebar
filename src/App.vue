@@ -31,7 +31,7 @@ import Sidebar from "./components/SideBar.vue"
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: 'Fira sans',sans-serif;
 }
 
 body{
