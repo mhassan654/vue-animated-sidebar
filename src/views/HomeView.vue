@@ -4,8 +4,8 @@
       <h1 class="text-sky-900 font-bold">Dashboard</h1>
     </div>
 
-<div class="cards">
- <div class="flex items-baseline mb-2">
+<div class="cards mb-2">
+ <div class="flex  items-baseline">
       <div class="flex-none justify-center">
         <div class="mb-3 xl:w-40">
           <label for="floating_outlined" class="absolute text-sm duration-300 
@@ -47,10 +47,11 @@
 
     </div>
 
-    <div class="grid grid-cols-4 mt-6">
+    <div class="grid  md:grid-cols-2 lg:grid-cols-4 mt-1">
       <DashboardCard title="Total revenue" priceOne="222,708" priceTwo="222,000" priceMin="708" icon="trending_up"/>
       <DashboardCard title="Total failed revenue" priceOne="35,079" priceTwo="34,000" priceMin="79" icon="trending_up"/>
-      <DashboardCard title="Total failed revenue" priceOne="35,079" priceTwo="34,000" priceMin="79" icon="trending_up"/>
+      <DashboardCard title="Total Transactions" priceOne="222,708" priceTwo="23,000" priceMin="235" icon="trending_up"/>
+      <DashboardCard title="Total Refunds" priceOne="6,708" priceTwo="5,765" priceMin="235" icon="trending_up"/>
       <!-- <DashboardCard gradientBg="bg-gradient-to-r from-cyan-500 to-blue-500" title="Total failed revenue" priceOne="35,079" priceTwo="34,000" priceMin="79" icon="trending_up"/> -->
 
       <!-- <div
@@ -58,25 +59,82 @@
       >
         3
       </div> -->
-      <div class="shadow rounded-md bg-white p-2 m-2 bg-gradient-to-r">4</div>
+      <!-- <div class="shadow rounded-md bg-white p-2 m-2 bg-gradient-to-r">4</div> -->
     </div>
 </div>
 
-<div class="grid grid-cols-3 gap-4">
-  <div class="bg-blue-300 rounded">06</div>
-  <div class="col-span-2 bg-blue-700 rounded">07</div>
+<div class="grid grid-cols-3 md:grid-rows-1 gap-4">
+  <div class="bg-white shadow-md p-4 rounded">
+    <div class="border-dashed border-2 border-red-600 p-2 h-10">
+      <query-builder :cubejs-api="cubejsApi" :query="query">
+      <template v-slot="{ resultSet }">
+        <chart-renderer v-if="resultSet" :result-set="resultSet" />
+      </template>
+    </query-builder>
+    </div>
+  </div>
+  <div class="col-span-2 p-4 shadow-md  bg-blue-700 rounded">
+    <div class="border-dashed border-2 border-red-600 p-2 h-10">chart</div>
+  </div>
 </div>
 
-<div class="grid grid-cols-3 gap-4 mt-6">
-  <div class="col-span-2 bg-blue-300">04</div>
-  <div class="bg-blue-700">05</div>
+<div class="grid grid-cols-3 gap-4 mt-4">
+  <div class="col-span-2 p-4 bg-white shadow-md rounded">
+    <div class="border-dashed border-2 border-red-600 p-2 h-10">chart</div>
+  </div>
+  <div class="bg-blue-700 shadow-md  p-4 rounded">
+    <div class="border-dashed border-2 border-red-600 p-2 h-10">chart</div>
+  </div>
 </div>
    
   </main>
 </template>
 
-<script setup>
+<script >
+import cubejs from '@cubejs-client/core'
+import { QueryBuilder } from '@cubejs-client/vue3'
+import ChartRenderer from '../components/dashboard/ChartComponents/ChartRenderer.vue'
 import DashboardCard from '../components/dashboard/DashboardCard.vue'
+
+const cubejsApi = cubejs(
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTQ2NjY4OTR9.0fdi5cuDZ2t3OSrPOMoc3B1_pwhnWj4ZmM3FHEX7Aus",
+  { apiUrl: "https://ecom.cubecloudapp.dev/cubejs-api/v1" }
+);
+
+export default {
+  name: "App",
+  components: {
+    QueryBuilder,
+    ChartRenderer,
+    DashboardCard,
+  },
+  data() {
+    // Query data from Cube.js Backend
+    const query = {
+      measures: ["Orders.count"],
+      dimensions: ["ProductCategories.name"],
+      filters: [
+        {
+          member: "ProductCategories.name",
+          operator: "equals",
+          values: ["Beauty", "Clothing", "Computers", "Electronics"],
+        },
+      ],
+      timeDimensions: [
+        {
+          dimension: "Orders.createdAt",
+          granularity: "month",
+          dateRange: "last 6 month",
+        },
+      ],
+    };
+
+    return {
+      cubejsApi,
+      query,
+    };
+  },
+};
 </script>
 <style lang="scss" scoped>
 .grid {

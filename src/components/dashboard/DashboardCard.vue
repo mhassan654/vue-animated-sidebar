@@ -1,5 +1,5 @@
 <template>
-<div class="shadow rounded-md p-3 m-2 bg-white align-left" :class="{'shadow rounded-md p-2 m-2 bg-gradient-to-r from-cyan-500 to-blue-500' : isActive}">
+<div class="shadow rounded-md p-4 ml-2 mb-2 bg-white align-left" :class="{'shadow rounded-md p-2 bg-gradient-to-r from-cyan-500 to-blue-500' : isActive}">
     <div class="flex flex-col">
         <div class="">
             <h3 class="font-bold leading-tight text-1xl mt-0 mb-2 text-blue-800">
